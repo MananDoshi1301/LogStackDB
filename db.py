@@ -1,4 +1,6 @@
 #### Some topics to cover
+# DEBUG: 2M scans taking a very long time: (File Size: )
+# TODO: Offset to a file 
 # Finding out the size of the file (Compaction and Partitioning)
 # DONE: Finding offset if key not in cache and setting in the cache
 # DONE: Writing to a file: Saving after writing
@@ -13,7 +15,7 @@
 # ADVANCED:
 
 from collections import defaultdict, deque
-
+import time
 class LSMStore:
     
     def __init__(self, filename: str):
@@ -65,7 +67,7 @@ class LSMStore:
         value = None
         def return_value():
             nonlocal value
-            return int(value) if (value and value.isdigit()) else value       
+            return int(value) if (value and value.isdigit()) else (value.strip() if value else value)       
         
         def get_offset(position: int, buffersize: int, key: str | int) -> int:
             read_size = buffersize
@@ -82,7 +84,8 @@ class LSMStore:
                 return -1
         
         if key in self._offset_map:
-            print("Key in cache")
+            # print("Key in cache")
+            
             # Reading offset from the cache
             offset = self._offset_map[key]
             
@@ -153,14 +156,11 @@ class LSMStore:
   
 if __name__ == "__main__":
     # cursor = LSMStore('db_mainfile.txt')    
-    cursor = LSMStore('db_testdata.txt')   
-    print(cursor.get("apple"))
-    print(cursor.get("foo"))
-    print(cursor.get("apple"))
-    print(cursor.get("foo"))
-    print(cursor.get("apple"))
-    print(cursor.get("foo"))
-    print(cursor.get("apple"))
-    print(cursor.get("foo"))
-    print(cursor.get("apple"))
-    print(cursor.get("foo"))
+    # cursor = LSMStore('db_testdata.txt')   
+    start = time.time()
+    cursor = LSMStore('db_testdata_2m.txt')   
+    print("Key: apple, Value:", cursor.get("apple"))
+    print("Key: foo, Value:", cursor.get("foo"))
+    # print("Key: nice, Value:",cursor.get("nice"))
+    end = time.time()
+    print("Total Time:", (end - start) * (10 ** 3), "ms")
