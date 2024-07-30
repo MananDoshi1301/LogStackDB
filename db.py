@@ -14,7 +14,7 @@
 # ADVANCED:
 # --------------------------------------------------------
 
-import os, sys
+import os, sys, time
 
 sys.path.insert(0, f'{os.getcwd()}/services')
 from set_manager import SetManager
@@ -25,9 +25,12 @@ class LSMStore (SetManager, GetManager):
 
 if __name__ == "__main__":
     path = "./data/"
-    # filename = "db_testdata_2m.txt"
-    filename = "db_mainfile.txt"
+    filename = "db_testdata_2m.txt"
+    # filename = "db_mainfile.txt"
     file_path = os.path.join(path, filename)
     cursor = LSMStore(file_path)
-    cursor.set("cache", "pid")
-    print(cursor.get("cache"))
+    start = time.time()
+    print(cursor.get("nice"))
+    print(cursor.get("nice"))
+    end = time.time()
+    print("Search Time: {}ms".format((end - start) * 10 ** 3))
