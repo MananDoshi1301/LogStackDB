@@ -43,7 +43,7 @@ class LSMStore:
             print("Error in closing file:", e)
             
         
-    def set(self, key: int | str, value: int | str) -> None:
+    def set(self, key: str, value: int | str) -> None:
         ### Append key, value to the end of the file
         
         # Moving cursor to the end of the file
