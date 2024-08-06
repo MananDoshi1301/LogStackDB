@@ -1,3 +1,5 @@
 db_testdata*
 db_mainfile.txt
 __pycache__
+__pycache__/*
+db.cpython-*.pyc
