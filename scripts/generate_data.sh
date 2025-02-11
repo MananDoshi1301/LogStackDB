@@ -1,4 +1,4 @@
-export TEST_DB_FILENAME="../data/db_testdata.txt"
+export TEST_DB_FILENAME="./data/db_testdata.txt"
 
 generate_data() {
   > "$TEST_DB_FILENAME"

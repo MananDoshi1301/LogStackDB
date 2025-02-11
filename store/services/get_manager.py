@@ -1,7 +1,10 @@
 from collections import deque
-from cache_manager import CacheManager
+from store.services.cache_manager import CacheManager
 
 class GetManager(CacheManager):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     def get(self, key: int | str) -> int | str | None:
         ### Get the key

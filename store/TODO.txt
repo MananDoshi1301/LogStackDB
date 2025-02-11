@@ -1,0 +1,15 @@
+######## SOME TASKS ########
+
+TODO:
+    Finding out the size of the file (Compaction and Partitioning)
+    ADVANCED: Exploring locks and concurrency for writing inside of a file
+    use cache to store incoming queries. If timeout write to a file
+    For writes gathering info like file and content to store in a queue. On backend running threads to store those one by one
+
+COMPLETED:
+    DONE: 2M scans taking a very long time: (File Size: )
+    DONE: Finding offset if key not in cache and setting in the cache
+    DONE: Writing to a file: Saving after writing
+    DONE: Reading from a file
+    DONE: Finding out the offset of inside a file (Indexing)
+    DONE: set to a file and get from file (Read Write O(n), but still locks on reads writes)

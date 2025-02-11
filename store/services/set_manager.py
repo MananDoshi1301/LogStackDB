@@ -1,6 +1,10 @@
-from cache_manager import CacheManager
+from store.services.cache_manager import CacheManager
 
 class SetManager(CacheManager):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
     def set(self, key: str, value: int | str) -> None:
         ### Append key, value to the end of the file
 
