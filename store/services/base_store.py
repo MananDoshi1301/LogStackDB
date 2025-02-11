@@ -1,5 +1,4 @@
 import os
-from collections import defaultdict
 
 class BaseStore:
     def __init__(self, filename: str, *args, **kwargs):
@@ -7,9 +6,6 @@ class BaseStore:
         self.filename = filename
         self._file_opening_permission = 'a+b'
         self._byte_encode_decode_format = 'utf-8'
-
-        # key: (byte offset in a file)
-        self._offset_map = defaultdict(int)
         
         # Opening file and using it constantly to store data
         self.cwd = os.getcwd()

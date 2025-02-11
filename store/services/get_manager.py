@@ -5,13 +5,15 @@ class GetManager(CacheManager):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.value = None
 
     def get(self, key: int | str) -> int | str | None:
-        ### Get the key
-        value = None
-        def return_value():
-            nonlocal value
-            return int(value) if (value and value.isdigit()) else (value.strip() if value else value)
+        ### Get the key        
+        
+        def return_value():            
+            final_val = int(self.value) if (self.value and self.value.isdigit()) else (self.value.strip() if self.value else self.value)
+            self.value = None
+            return final_val
 
         def get_offset(position: int, buffersize: int, key: str | int) -> int:
             read_size = buffersize
@@ -40,7 +42,7 @@ class GetManager(CacheManager):
             line_bytes = self._file.readline()
             line = line_bytes.decode(self._byte_encode_decode_format)
             k, v = line.split(',')
-            if k == key: value = v
+            if k == key: self.value = v
             return return_value()
 
         else:
@@ -53,32 +55,33 @@ class GetManager(CacheManager):
             position = self._file.tell()
             size = position // 20
             buffer_size = size + size % 2
-            queue = deque()
-            res = []
+            queue: deque[bytes] = deque()
+            res: list[str] = []
             set_offsets_for = []
 
             while position > 0:
-                read_size = min(buffer_size, position)
-                position -= read_size
-                # print(position)
+                read_size: int = min(buffer_size, position)
+                position: int = position - read_size  
+                # print(position)              
                 self._file.seek(position)
 
                 # Iterate through text
-                buffer_read = self._file.read(read_size)
-                lines = buffer_read.split(b'\n')
+                buffer_read: bytes = self._file.read(read_size)
+                lines: list[bytes] = buffer_read.split(b'\n')
 
                 # Handle the first (possibly incomplete) line
                 if queue:
-                    back_element = queue.popleft()
-                    front_element = lines.pop()
-                    text = front_element + back_element
+                    back_element: bytes = queue.popleft()
+                    front_element: bytes = lines.pop()
+                    text: bytes = front_element + back_element
                     res.append(text.decode(self._byte_encode_decode_format))
 
                 if not queue and lines: queue.append(lines[0])
 
                 # search for key: if found break or else clear buffer
-                for idx in range(len(lines) - 1, 0, -1):
-                    res_text = lines[idx].decode(self._byte_encode_decode_format)
+                idx: int = 0
+                for idx in range(len(lines) - 1, 0, -1):                                        
+                    res_text: str = lines[idx].decode(self._byte_encode_decode_format)
                     if res_text != '': res.append(res_text)
 
                     for string in res:
@@ -87,11 +90,11 @@ class GetManager(CacheManager):
                         if k not in self._offset_map: set_offsets_for.append((position, key))
 
                         if k == key:
-                            value = v
-                            offset_val = get_offset(position, buffer_size, key)
+                            self.value = v
+                            offset_val: int = get_offset(position, buffer_size, key)
                             self.set_cache(key, offset_val)
                             return return_value()
-
+                                            
                     res.clear()
 
             if queue:
