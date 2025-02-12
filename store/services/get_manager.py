@@ -1,5 +1,6 @@
 from collections import deque
 from store.services.cache_manager import CacheManager
+from store.services.response_manager import ResponsePackage, Response
 
 class GetManager(CacheManager):
 
@@ -7,13 +8,14 @@ class GetManager(CacheManager):
         super().__init__(*args, **kwargs)
         self.value = None
 
-    def get(self, key: int | str) -> int | str | None:
+    def get(self, key: int | str) -> Response:
         ### Get the key        
         
-        def return_value():            
-            final_val = int(self.value) if (self.value and self.value.isdigit()) else (self.value.strip() if self.value else self.value)
+        def return_response_object():              
+            res = ResponsePackage(self.value)
+            final_res = res.package_response()
             self.value = None
-            return final_val
+            return final_res
 
         def get_offset(position: int, buffersize: int, key: str | int) -> int:
             read_size = buffersize
@@ -43,7 +45,7 @@ class GetManager(CacheManager):
             line = line_bytes.decode(self._byte_encode_decode_format)
             k, v = line.split(',')
             if k == key: self.value = v
-            return return_value()
+            return return_response_object()
 
         else:
             # Optional: Check if key exists using bloom filter
@@ -93,7 +95,7 @@ class GetManager(CacheManager):
                             self.value = v
                             offset_val: int = get_offset(position, buffer_size, key)
                             self.set_cache(key, offset_val)
-                            return return_value()
+                            return return_response_object()
                                             
                     res.clear()
 
@@ -103,6 +105,6 @@ class GetManager(CacheManager):
             if k == key:
                 value = v
                 self._offset_map[key] = 0
-                return return_value()
+                return return_response_object()
 
         return None
