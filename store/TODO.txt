@@ -5,6 +5,7 @@ TODO:
     ADVANCED: Exploring locks and concurrency for writing inside of a file
     use cache to store incoming queries. If timeout write to a file
     For writes gathering info like file and content to store in a queue. On backend running threads to store those one by one
+    Find a more advanced way of encoding data to lighter weight like bson
 
 COMPLETED:
     DONE: 2M scans taking a very long time: (File Size: )
