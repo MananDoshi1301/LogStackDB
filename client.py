@@ -1,15 +1,14 @@
 import os, time
-from store import db
+from store.db import LSMStore
+from store.services.response_manager import Response
 
 if __name__ == "__main__":
     
     filename = "db_testdata_2m.txt"        
-    cursor = db.LSMStore(filename=filename)    
+    cursor = LSMStore(filename=filename)    
     start = time.time()
-    print(cursor.get("nice"))
-    print(cursor.get("bar"))
-    print(cursor.get("foo"))
-    print(cursor.get("car"))
-    print(cursor.get("hello"))
+    res: Response = cursor.get("nice")
+    print(res.status, res.type)
+    
     end = time.time()
     print("Search Time: {}ms".format((end - start) * 10 ** 3))
