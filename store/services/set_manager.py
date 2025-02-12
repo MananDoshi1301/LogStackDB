@@ -15,8 +15,8 @@ class SetManager(CacheManager):
         offset = self._file.tell()
 
         # Form the text to store and append to file
-        text = "{}, {}\n".format(key, value)
-        bytes_text = text.encode(self._byte_encode_decode_format)
+        text = "{}, {}\n".format(key, value)        
+        bytes_text: bytes = self.encode(text)
         self._file.write(bytes_text)
 
         # Store the offset in the cache

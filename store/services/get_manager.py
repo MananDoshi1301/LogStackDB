@@ -42,7 +42,8 @@ class GetManager(CacheManager):
 
             # Reading the line in that file
             line_bytes = self._file.readline()
-            line = line_bytes.decode(self._byte_encode_decode_format)
+            # line = line_bytes.decode(self._byte_encode_decode_format)
+            line = self.decode(line_bytes)
             k, v = line.split(',')
             if k == key: self.value = v
             return return_response_object()
@@ -76,14 +77,16 @@ class GetManager(CacheManager):
                     back_element: bytes = queue.popleft()
                     front_element: bytes = lines.pop()
                     text: bytes = front_element + back_element
-                    res.append(text.decode(self._byte_encode_decode_format))
+                    res.append(self.decode(text))
+                    # text.decode(self._byte_encode_decode_format)
 
                 if not queue and lines: queue.append(lines[0])
 
                 # search for key: if found break or else clear buffer
                 idx: int = 0
                 for idx in range(len(lines) - 1, 0, -1):                                        
-                    res_text: str = lines[idx].decode(self._byte_encode_decode_format)
+                    # res_text: str = lines[idx].decode(self._byte_encode_decode_format)
+                    res_text: str = self.decode(lines[idx])
                     if res_text != '': res.append(res_text)
 
                     for string in res:
@@ -99,12 +102,14 @@ class GetManager(CacheManager):
                                             
                     res.clear()
 
-            if queue:
-                res_text = queue.popleft().decode(self._byte_encode_decode_format)
+            if queue: 
+                # res_text = queue.popleft().decode(self._byte_encode_decode_format)
+                res_text = self.decode(queue.popleft())
+
             k, v = res_text.split(',')
             if k == key:
                 value = v
                 self._offset_map[key] = 0
                 return return_response_object()
 
-        return None
+        return return_response_object()

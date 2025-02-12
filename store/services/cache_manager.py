@@ -1,7 +1,7 @@
 from collections import defaultdict
-from store.services.base_store import BaseStore
+from store.services.codec_manager import CodecManager
 
-class CacheManager(BaseStore):
+class CacheManager(CodecManager):
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
     

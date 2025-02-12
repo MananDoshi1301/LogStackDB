@@ -8,7 +8,7 @@ if __name__ == "__main__":
     cursor = LSMStore(filename=filename)    
     start = time.time()
     res: Response = cursor.get("nice")
-    print(res.status, res.type)
+    print(res.status, res.type, res.formatted_value)
     
     end = time.time()
     print("Search Time: {}ms".format((end - start) * 10 ** 3))

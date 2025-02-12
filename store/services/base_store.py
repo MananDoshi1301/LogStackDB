@@ -4,8 +4,7 @@ class BaseStore:
     def __init__(self, filename: str, *args, **kwargs):
         # set file permission: 'a+'
         self.filename = filename
-        self._file_opening_permission = 'a+b'
-        self._byte_encode_decode_format = 'utf-8'
+        self._file_opening_permission = 'a+b'        
         
         # Opening file and using it constantly to store data
         self.cwd = os.getcwd()
